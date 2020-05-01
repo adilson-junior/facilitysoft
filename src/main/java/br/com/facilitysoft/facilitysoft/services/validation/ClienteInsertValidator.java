@@ -6,12 +6,20 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import br.com.facilitysoft.facilitysoft.dominio.Cliente;
 import br.com.facilitysoft.facilitysoft.dominio.enums.TipoCliente;
 import br.com.facilitysoft.facilitysoft.dto.NewClienteDTO;
+import br.com.facilitysoft.facilitysoft.repositories.ClienteRepository;
 import br.com.facilitysoft.facilitysoft.resources.exception.FieldMessage;
 import br.com.facilitysoft.facilitysoft.services.validation.utils.BR;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, NewClienteDTO> {
+	
+	@Autowired
+	private ClienteRepository repo;
+	
 	 @Override
 	 public void initialize(ClienteInsert ann) {
 	 }
@@ -26,6 +34,14 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 
 		if (objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
 			list.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
+		}
+		Cliente auxCNPJ = repo.findByCpfOuCnpj(objDto.getCpfOuCnpj());
+		if (auxCNPJ != null) {
+			list.add(new FieldMessage("cpfOuCnpj", "CPF Ou CNPJ já exitente"));
+		}
+		Cliente aux = repo.findByEmail(objDto.getEmail());
+		if (aux != null) {
+			list.add(new FieldMessage("email", "Email já exitente"));
 		}
 
 	 for (FieldMessage e : list) {
