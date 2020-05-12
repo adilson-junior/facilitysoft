@@ -40,8 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	};
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
+	protected void configure(HttpSecurity http) throws Exception {		
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http.headers().frameOptions().disable();
         }
@@ -61,6 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 		return source;
+	}
+	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 	
 	
