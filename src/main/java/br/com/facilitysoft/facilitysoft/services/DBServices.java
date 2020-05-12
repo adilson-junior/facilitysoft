@@ -20,6 +20,7 @@ import br.com.facilitysoft.facilitysoft.dominio.PagamentoComCartao;
 import br.com.facilitysoft.facilitysoft.dominio.Pedido;
 import br.com.facilitysoft.facilitysoft.dominio.Produto;
 import br.com.facilitysoft.facilitysoft.dominio.enums.EstadoPagamento;
+import br.com.facilitysoft.facilitysoft.dominio.enums.Perfil;
 import br.com.facilitysoft.facilitysoft.dominio.enums.TipoCliente;
 import br.com.facilitysoft.facilitysoft.repositories.CategoriaRepository;
 import br.com.facilitysoft.facilitysoft.repositories.CidadeRepository;
@@ -123,14 +124,20 @@ public class DBServices {
 
 		Cliente cli1 = new Cliente(null, "Adilson Junior", "adilson_217@hotmail.com", "21996689897", TipoCliente.PESSOAFISICA, pe.encode("123456"));
 		cli1.getTelefones().addAll(Arrays.asList("22228888", "77788999"));
-
-		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardin", "38220834", cli1, c1);
+		
+		Cliente cli2 = new Cliente(null, "Ana Costa", "adilsonvajr@gmail.com", "31628382740", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		cli2.getTelefones().addAll(Arrays.asList("93883321", "34252625"));
+		cli2.addPerfil(Perfil.ADMIN);
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
-
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "281777012", cli2, c2);
+		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
-
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
