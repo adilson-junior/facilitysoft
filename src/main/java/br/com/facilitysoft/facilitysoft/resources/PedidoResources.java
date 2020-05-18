@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.facilitysoft.facilitysoft.dominio.Categoria;
 import br.com.facilitysoft.facilitysoft.dominio.Pedido;
-import br.com.facilitysoft.facilitysoft.dto.CategoriaDTO;
 import br.com.facilitysoft.facilitysoft.services.PedidoService;
 
 @RestController
