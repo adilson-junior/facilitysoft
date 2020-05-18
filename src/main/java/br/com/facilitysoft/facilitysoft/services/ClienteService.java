@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.facilitysoft.facilitysoft.dominio.Cidade;
 import br.com.facilitysoft.facilitysoft.dominio.Cliente;
 import br.com.facilitysoft.facilitysoft.dominio.Endereco;
+import br.com.facilitysoft.facilitysoft.dominio.enums.Perfil;
 import br.com.facilitysoft.facilitysoft.dominio.enums.TipoCliente;
 import br.com.facilitysoft.facilitysoft.dto.ClienteDTO;
 import br.com.facilitysoft.facilitysoft.dto.NewClienteDTO;
 import br.com.facilitysoft.facilitysoft.repositories.ClienteRepository;
 import br.com.facilitysoft.facilitysoft.repositories.EnderecoRepository;
+import br.com.facilitysoft.facilitysoft.security.UserSS;
+import br.com.facilitysoft.facilitysoft.services.exceptions.AuthorizationException;
 import br.com.facilitysoft.facilitysoft.services.exceptions.DataIntegrityException;
 import br.com.facilitysoft.facilitysoft.services.exceptions.ObjectNotFoundException;
 
@@ -46,6 +49,10 @@ public class ClienteService {
 
 
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
